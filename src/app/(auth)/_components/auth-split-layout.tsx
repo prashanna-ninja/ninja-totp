@@ -38,7 +38,7 @@ export function AuthSplitLayout({ children }: AuthSplitLayoutProps) {
         </div>
 
         {/* Marketing copy */}
-        <div className="space-y-3">
+        <div className="space-y-3 px-10">
           <h1 className="h1 text-brand-surface max-w-xs">
             Your codes,<br />in one quiet place.
           </h1>
