@@ -1,3 +1,4 @@
+import Link from "next/link"
 import { ShieldCheck } from "lucide-react"
 import { TotpCard } from "./totp-card"
 
@@ -67,9 +68,9 @@ export function AuthSplitLayout({ children }: AuthSplitLayoutProps) {
           <span className="p3 text-muted-foreground">© Ninja TOTP 2025</span>
           <div className="flex items-center gap-4">
             {["Privacy", "Terms", "Status"].map((link) => (
-              <a key={link} href="#" className="p3 text-muted-foreground hover:text-foreground transition-colors">
+              <Link key={link} href="#" className="p3 text-muted-foreground hover:text-foreground transition-colors">
                 {link}
-              </a>
+              </Link>
             ))}
           </div>
         </footer>
