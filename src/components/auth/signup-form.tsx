@@ -3,27 +3,14 @@
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { z } from "zod"
 import { Eye, EyeOff } from "lucide-react"
 
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
+import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field"
 import { cn } from "@/lib/utils"
-
-const schema = z
-  .object({
-    name: z.string().min(2, "At least 2 characters"),
-    email: z.string().min(1, "Email is required").email("Enter a valid work email"),
-    password: z.string().min(8, "At least 8 characters"),
-    confirmPassword: z.string().min(1, "Please confirm your password"),
-  })
-  .refine((d) => d.password === d.confirmPassword, {
-    message: "Passwords don't match",
-    path: ["confirmPassword"],
-  })
-
-type SignupValues = z.infer<typeof schema>
+import { signUpSchema, type SignUpInput } from "@/validations/auth"
+import { toast } from "sonner"
 
 export function SignupForm() {
   const [showPassword, setShowPassword] = useState(false)
@@ -33,13 +20,18 @@ export function SignupForm() {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<SignupValues>({
-    resolver: zodResolver(schema) as any,
+  } = useForm<SignUpInput>({
+    resolver: zodResolver(signUpSchema),
     defaultValues: { name: "", email: "", password: "", confirmPassword: "" },
   })
 
-  function onSubmit(values: SignupValues) {
-    console.log(values)
+  async function onSubmit(values: SignUpInput) {
+    try {
+      console.log(values)
+      toast.success("Account created successfully")
+    } catch {
+      toast.error("Something went wrong. Please try again.")
+    }
   }
 
   return (
@@ -52,11 +44,8 @@ export function SignupForm() {
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
-        {/* Name */}
-        <div className="space-y-1.5">
-          <Label htmlFor="name" className="p3 text-foreground font-medium">
-            Full name
-          </Label>
+        <Field>
+          <FieldLabel htmlFor="name">Full name</FieldLabel>
           <Input
             id="name"
             type="text"
@@ -65,16 +54,11 @@ export function SignupForm() {
             aria-invalid={!!errors.name}
             {...register("name")}
           />
-          {errors.name && (
-            <p className="p3 text-destructive">{errors.name.message}</p>
-          )}
-        </div>
+          <FieldError>{errors.name?.message}</FieldError>
+        </Field>
 
-        {/* Email */}
-        <div className="space-y-1.5">
-          <Label htmlFor="email" className="p3 text-foreground font-medium">
-            Work email
-          </Label>
+        <Field>
+          <FieldLabel htmlFor="email">Work email</FieldLabel>
           <Input
             id="email"
             type="email"
@@ -83,17 +67,12 @@ export function SignupForm() {
             aria-invalid={!!errors.email}
             {...register("email")}
           />
-          {errors.email && (
-            <p className="p3 text-destructive">{errors.email.message}</p>
-          )}
-        </div>
+          <FieldError>{errors.email?.message}</FieldError>
+        </Field>
 
-        {/* Password */}
-        <div className="space-y-1.5">
-          <Label htmlFor="password" className="p3 text-foreground font-medium">
-            Master password
-          </Label>
-          <div className="relative">
+        <Field>
+          <FieldLabel htmlFor="password">Master password</FieldLabel>
+          <FieldGroup>
             <Input
               id="password"
               type={showPassword ? "text" : "password"}
@@ -112,18 +91,13 @@ export function SignupForm() {
             >
               {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
             </Button>
-          </div>
-          {errors.password && (
-            <p className="p3 text-destructive">{errors.password.message}</p>
-          )}
-        </div>
+          </FieldGroup>
+          <FieldError>{errors.password?.message}</FieldError>
+        </Field>
 
-        {/* Confirm password */}
-        <div className="space-y-1.5">
-          <Label htmlFor="confirmPassword" className="p3 text-foreground font-medium">
-            Confirm password
-          </Label>
-          <div className="relative">
+        <Field>
+          <FieldLabel htmlFor="confirmPassword">Confirm password</FieldLabel>
+          <FieldGroup>
             <Input
               id="confirmPassword"
               type={showConfirm ? "text" : "password"}
@@ -142,11 +116,9 @@ export function SignupForm() {
             >
               {showConfirm ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
             </Button>
-          </div>
-          {errors.confirmPassword && (
-            <p className="p3 text-destructive">{errors.confirmPassword.message}</p>
-          )}
-        </div>
+          </FieldGroup>
+          <FieldError>{errors.confirmPassword?.message}</FieldError>
+        </Field>
 
         {/* Already have account */}
         <div className="flex items-center justify-end">

@@ -8,18 +8,15 @@ import { Eye, EyeOff, Building2, Fingerprint } from "lucide-react"
 import { Controller } from "react-hook-form"
 
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Separator } from "@/components/ui/separator"
+import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field"
 import { cn } from "@/lib/utils"
+import { signInSchema } from "@/validations/auth"
+import { toast } from "sonner"
 
-const schema = z.object({
-  email: z.string().min(1, "Email is required").email("Enter a valid work email"),
-  password: z.string().min(1, "Master password is required"),
-  trustDevice: z.boolean(),
-})
-
+const schema = signInSchema.extend({ trustDevice: z.boolean() })
 type LoginValues = z.infer<typeof schema>
 
 export function LoginForm() {
@@ -35,8 +32,13 @@ export function LoginForm() {
     defaultValues: { email: "", password: "", trustDevice: false },
   })
 
-  function onSubmit(values: LoginValues) {
-    console.log(values)
+  async function onSubmit(values: LoginValues) {
+    try {
+      console.log(values)
+      toast.success("Signed in successfully")
+    } catch {
+      toast.error("Invalid email or password")
+    }
   }
 
   return (
@@ -52,11 +54,8 @@ export function LoginForm() {
 
       {/* Form */}
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
-        {/* Email */}
-        <div className="space-y-1.5">
-          <Label htmlFor="email" className="p3 text-foreground font-medium">
-            Work email
-          </Label>
+        <Field>
+          <FieldLabel htmlFor="email">Work email</FieldLabel>
           <Input
             id="email"
             type="email"
@@ -65,17 +64,12 @@ export function LoginForm() {
             aria-invalid={!!errors.email}
             {...register("email")}
           />
-          {errors.email && (
-            <p className="p3 text-destructive">{errors.email.message}</p>
-          )}
-        </div>
+          <FieldError>{errors.email?.message}</FieldError>
+        </Field>
 
-        {/* Password */}
-        <div className="space-y-1.5">
-          <Label htmlFor="password" className="p3 text-foreground font-medium">
-            Master password
-          </Label>
-          <div className="relative">
+        <Field>
+          <FieldLabel htmlFor="password">Master password</FieldLabel>
+          <FieldGroup>
             <Input
               id="password"
               type={showPassword ? "text" : "password"}
@@ -94,11 +88,9 @@ export function LoginForm() {
             >
               {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
             </Button>
-          </div>
-          {errors.password && (
-            <p className="p3 text-destructive">{errors.password.message}</p>
-          )}
-        </div>
+          </FieldGroup>
+          <FieldError>{errors.password?.message}</FieldError>
+        </Field>
 
         {/* Trust device + Forgot */}
         <div className="flex items-center justify-between">
@@ -114,9 +106,9 @@ export function LoginForm() {
                 />
               )}
             />
-            <Label htmlFor="trust" className="p3 text-muted-foreground cursor-pointer">
+            <FieldLabel htmlFor="trust" className="p3 text-muted-foreground cursor-pointer font-normal">
               Trust this device for 30 days
-            </Label>
+            </FieldLabel>
           </div>
           <div className="flex items-center gap-3">
             <Button variant="link" size="sm" asChild className="p3 text-muted-foreground h-auto p-0">
