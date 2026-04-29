@@ -1,16 +1,16 @@
 model TOTP {
-    id      String   @id
-    title  String
-    issuer String
-    secret String
-    algorithm String @default("SHA1")
-    digits Int @default(6)
-    period Int @default(30)
-    vaultId String
-    vault   Vault    @relation(fields: [vaultId], references: [id], onDelete: Cascade)
-    createdAt DateTime  @default(now())
-    updatedAt DateTime  @updatedAt
+  id        String   @id @default(uuid())
+  title     String
+  issuer    String?
+  secret    String
+  algorithm String   @default("SHA1")
+  digits    Int      @default(6)
+  period    Int      @default(30)
+  vaultId   String
+  vault     Vault    @relation(fields: [vaultId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-    @@map("totp")
-
+  @@index([vaultId])
+  @@map("totp")
 }

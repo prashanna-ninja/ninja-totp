@@ -13,18 +13,18 @@ datasource db {
 }
 
 model User {
-  id            String    @id
+  id            String             @id
   name          String
   email         String
-  emailVerified Boolean   @default(false)
+  emailVerified Boolean            @default(false)
   image         String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  createdAt     DateTime           @default(now())
+  updatedAt     DateTime           @updatedAt
   sessions      Session[]
   accounts      Account[]
-  isSuperAdmin   Boolean   @default(false)
+  isSuperAdmin  Boolean            @default(false)
   organizations OrganizationUser[]
-  teams        TeamUser[]
+  teams         TeamUser[]
 
   @@unique([email])
   @@map("user")
