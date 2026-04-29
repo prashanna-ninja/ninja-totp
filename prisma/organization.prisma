@@ -1,32 +1,33 @@
 model Organization {
-    id         String    @id
-    name       String
-    createdAt  DateTime  @default(now())
-    updatedAt  DateTime  @updatedAt
-    users      OrganizationUser[]
-    vaults     Vault[]
-    @@unique([name])
+  id        String             @id @default(uuid())
+  name      String
+  createdAt DateTime           @default(now())
+  updatedAt DateTime           @updatedAt
+  members   OrganizationUser[]
+  teams     Team[]
+  vaults    Vault[]
 
-    @@map("organization")
+  @@unique([name])
+  @@map("organization")
 }
 
 enum OrganizationRole {
-    ORGADMIN
-    MANAGER
-    USER
+  ORGADMIN
+  MANAGER
+  USER
 }
 
-
 model OrganizationUser {
-    id         String   @id
-    organizationId String
-    userId     String
-    role       OrganizationRole
-    createdAt  DateTime @default(now())
-    updatedAt  DateTime @updatedAt
-    organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-    user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
-    @@unique([organizationId, userId])
-    @@index([userId])
-    @@map("organization_user")
+  id             String           @id @default(uuid())
+  organizationId String
+  userId         String
+  role           OrganizationRole
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  organization   Organization     @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user           User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, userId])
+  @@index([userId])
+  @@map("organization_user")
 }

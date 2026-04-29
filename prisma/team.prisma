@@ -1,25 +1,27 @@
-model Team{
-    id        String    @id
-    name      String
-    createdAt DateTime  @default(now())
-    updatedAt DateTime  @updatedAt
-    users     TeamUser[]
-    organizationId String
-    organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-    @@map("team")
+model Team {
+  id             String       @id @default(uuid())
+  name           String
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  members        TeamUser[]
+  vaults         VaultTeam[]
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  @@unique([organizationId, name])
+  @@map("team")
 }
 
-model TeamUser{
-    id        String    @default(uuid()) @id
-    teamId    String
-    userId    String
-    role      String
-    createdAt DateTime  @default(now())
-    updatedAt DateTime  @updatedAt
-    team      Team      @relation(fields: [teamId], references: [id], onDelete: Cascade)
-    user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+model TeamUser {
+  id        String   @id @default(uuid())
+  teamId    String
+  userId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  team      Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-    @@unique([teamId, userId])
-    @@index([userId])
-    @@map("team_user")
+  @@unique([teamId, userId])
+  @@index([userId])
+  @@map("team_user")
 }
