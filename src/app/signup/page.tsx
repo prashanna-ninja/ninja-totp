@@ -1,10 +1,10 @@
 import { AuthSplitLayout } from "@/components/auth/auth-split-layout"
-import { LoginForm } from "@/components/auth/login-form"
+import { SignupForm } from "@/components/auth/signup-form"
 
-export default function SignInPage() {
+export default function SignUpPage() {
   return (
     <AuthSplitLayout env="Development">
-      <LoginForm />
+      <SignupForm />
     </AuthSplitLayout>
   )
 }
