@@ -3,7 +3,7 @@ import { SignupForm } from "@/components/auth/signup-form"
 
 export default function SignUpPage() {
   return (
-    <AuthSplitLayout env="Development">
+    <AuthSplitLayout>
       <SignupForm />
     </AuthSplitLayout>
   )

@@ -3,10 +3,9 @@ import { TotpCard } from "./totp-card"
 
 interface AuthSplitLayoutProps {
   children: React.ReactNode
-  env?: string
 }
 
-export function AuthSplitLayout({ children, env = "Development" }: AuthSplitLayoutProps) {
+export function AuthSplitLayout({ children }: AuthSplitLayoutProps) {
   return (
     <div className="theme-page md:flex-row min-h-dvh">
       {/* ── Left panel ── */}
@@ -56,13 +55,6 @@ export function AuthSplitLayout({ children, env = "Development" }: AuthSplitLayo
 
       {/* ── Right panel ── */}
       <div className="flex flex-1 flex-col bg-background relative">
-        {/* Env badge */}
-        <div className="absolute top-4 right-4">
-          <span className="label bg-brand-muted text-brand-surface rounded-full px-3 py-1.5 inline-flex items-center gap-1">
-            You&apos;re in! {env} →
-          </span>
-        </div>
-
         {/* Form area */}
         <div className="flex flex-1 flex-col items-center justify-center px-8 py-16">
           <div className="w-full max-w-sm">
