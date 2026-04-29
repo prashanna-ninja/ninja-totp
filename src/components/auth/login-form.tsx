@@ -1,26 +1,31 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { z } from "zod"
-import { Eye, EyeOff, Building2, Fingerprint } from "lucide-react"
-import { Controller } from "react-hook-form"
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { Eye, EyeOff, Building2, Fingerprint } from "lucide-react";
+import { Controller } from "react-hook-form";
 
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Separator } from "@/components/ui/separator"
-import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field"
-import { cn } from "@/lib/utils"
-import { signInSchema } from "@/validations/auth"
-import { toast } from "sonner"
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Separator } from "@/components/ui/separator";
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field";
+import { cn } from "@/lib/utils";
+import { signInSchema } from "@/validations/auth";
+import { toast } from "sonner";
 
-const schema = signInSchema.extend({ trustDevice: z.boolean() })
-type LoginValues = z.infer<typeof schema>
+const schema = signInSchema.extend({ trustDevice: z.boolean() });
+type LoginValues = z.infer<typeof schema>;
 
 export function LoginForm() {
-  const [showPassword, setShowPassword] = useState(false)
+  const [showPassword, setShowPassword] = useState(false);
 
   const {
     register,
@@ -30,14 +35,14 @@ export function LoginForm() {
   } = useForm<LoginValues>({
     resolver: zodResolver(schema),
     defaultValues: { email: "", password: "", trustDevice: false },
-  })
+  });
 
   async function onSubmit(values: LoginValues) {
     try {
-      console.log(values)
-      toast.success("Signed in successfully")
+      console.log(values);
+      toast.success("Signed in successfully");
     } catch {
-      toast.error("Invalid email or password")
+      toast.error("Invalid email or password");
     }
   }
 
@@ -49,7 +54,9 @@ export function LoginForm() {
       {/* Heading */}
       <div className="space-y-1.5">
         <h1 className="h1">Welcome back</h1>
-        <p className="p2 text-muted-foreground">Sign in to access your team vaults.</p>
+        <p className="p2 text-muted-foreground">
+          Sign in to access your team vaults.
+        </p>
       </div>
 
       {/* Form */}
@@ -86,7 +93,11 @@ export function LoginForm() {
               className="absolute inset-y-0 right-0 size-8 my-auto mr-1 text-muted-foreground hover:text-foreground"
               aria-label={showPassword ? "Hide password" : "Show password"}
             >
-              {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+              {showPassword ? (
+                <EyeOff className="size-4" />
+              ) : (
+                <Eye className="size-4" />
+              )}
             </Button>
           </FieldGroup>
           <FieldError>{errors.password?.message}</FieldError>
@@ -106,16 +117,29 @@ export function LoginForm() {
                 />
               )}
             />
-            <FieldLabel htmlFor="trust" className="p3 text-muted-foreground cursor-pointer font-normal">
+            <FieldLabel
+              htmlFor="trust"
+              className="p3 text-muted-foreground cursor-pointer font-normal"
+            >
               Trust this device for 30 days
             </FieldLabel>
           </div>
           <div className="flex items-center gap-3">
-            <Button variant="link" size="sm" asChild className="p3 text-muted-foreground h-auto p-0">
+            <Button
+              variant="link"
+              size="sm"
+              asChild
+              className="p3 text-muted-foreground h-auto p-0"
+            >
               <a href="/signup">Sign up</a>
             </Button>
             <span className="p3 text-border">·</span>
-            <Button variant="link" size="sm" asChild className="p3 text-muted-foreground h-auto p-0">
+            <Button
+              variant="link"
+              size="sm"
+              asChild
+              className="p3 text-muted-foreground h-auto p-0"
+            >
               <a href="#">Forgot?</a>
             </Button>
           </div>
@@ -124,11 +148,9 @@ export function LoginForm() {
         {/* Submit */}
         <Button
           type="submit"
+          variant={"primary"}
           disabled={isSubmitting}
-          className={cn(
-            "w-full h-10 rounded-lg p2",
-            "bg-brand text-brand-foreground hover:bg-brand/90 transition-colors",
-          )}
+          className={cn("w-full h-10 rounded-lg p2")}
         >
           {isSubmitting ? "Signing in…" : "Continue →"}
         </Button>
@@ -168,5 +190,5 @@ export function LoginForm() {
         </Button>
       </div>
     </div>
-  )
+  );
 }
