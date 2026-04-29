@@ -22,6 +22,9 @@ model User {
   updatedAt     DateTime  @updatedAt
   sessions      Session[]
   accounts      Account[]
+  isSuperAdmin   Boolean   @default(false)
+  organizations OrganizationUser[]
+  teams        TeamUser[]
 
   @@unique([email])
   @@map("user")

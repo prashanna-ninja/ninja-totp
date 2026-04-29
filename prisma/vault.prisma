@@ -1,0 +1,22 @@
+model Vault {
+    id      String    @id
+    name    String
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+    totps    TOTP[]
+    organizationId String
+    organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+}
+
+model VaultTeam {
+    id      String    @id
+    vaultId String
+    teamId  String
+    vault   Vault     @relation(fields: [vaultId], references: [id], onDelete: Cascade)
+    team    Team      @relation(fields: [teamId], references: [id], onDelete: Cascade)
+
+    @@unique([vaultId, teamId])
+    @@index([teamId])
+    @@map("vault_team")
+}
+
