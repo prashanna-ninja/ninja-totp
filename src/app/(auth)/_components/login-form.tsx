@@ -173,11 +173,16 @@ export function LoginForm() {
         <Button type="button" variant="outline" className="flex flex-col items-center gap-1.5 h-auto py-4 rounded-xl">
           <Building2 className="size-5 text-muted-foreground" />
           <div className="text-center">
-            <p className="p3 font-medium text-foreground">SSO</p>
-            <p className="label text-muted-foreground">SAML or OIDC</p>
+            <p className="p3 font-medium text-foreground">Quick Login</p>
+            <p className="label text-muted-foreground">via magic links</p>
           </div>
         </Button>
-        <Button type="button" variant="outline" className="flex flex-col items-center gap-1.5 h-auto py-4 rounded-xl">
+        <Button
+          type="button"
+          variant="outline"
+          className="flex flex-col items-center gap-1.5 h-auto py-4 rounded-xl"
+          onClick={() => toast.info("PassKey login is coming soon!")}
+        >
           <Fingerprint className="size-5 text-muted-foreground" />
           <div className="text-center">
             <p className="p3 font-medium text-foreground">PassKey</p>

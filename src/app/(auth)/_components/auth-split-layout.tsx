@@ -46,13 +46,13 @@ function DefaultLeftPanelContent() {
             vault="Stripe"
             code="491 827"
             variant="dark"
-            className="absolute top-0 right-0 rotate-6 scale-90 opacity-80"
+            className="absolute top-0 right-0 rotate-6 scale-90"
           />
           <TotpCard
             vault="AWS"
             code="192 073"
             variant="light"
-            className="absolute top-3 left-2 rotate-2 scale-95 opacity-90"
+            className="absolute top-6 left-0 rotate-2 scale-95"
           />
           <TotpCard
             vault="GitHub"

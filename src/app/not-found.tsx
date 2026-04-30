@@ -20,7 +20,7 @@ export default function NotFound() {
         </div>
 
         <Button asChild variant="primary" className="w-full h-10 rounded-lg p2">
-          <Link href="/">Back to sign in</Link>
+          <Link href="/">Go to homepage</Link>
         </Button>
       </div>
     </div>
