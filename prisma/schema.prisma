@@ -22,7 +22,7 @@ model User {
   updatedAt     DateTime           @updatedAt
   sessions      Session[]
   accounts      Account[]
-  isSuperAdmin  Boolean            @default(false)
+  role          UserRole           @default(USER)
   organizations OrganizationUser[]
   teams         TeamUser[]
 
@@ -64,6 +64,12 @@ model Account {
 
   @@index([userId])
   @@map("account")
+}
+
+enum UserRole {
+  USER
+  SUPERADMIN
+  SUPPORT
 }
 
 model Verification {

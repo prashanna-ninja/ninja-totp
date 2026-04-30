@@ -3,6 +3,8 @@ model Organization {
   name      String
   createdAt DateTime           @default(now())
   updatedAt DateTime           @updatedAt
+  color     String?
+  image     String?
   members   OrganizationUser[]
   teams     Team[]
   vaults    Vault[]
