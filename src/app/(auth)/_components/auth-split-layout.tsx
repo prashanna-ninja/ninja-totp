@@ -1,9 +1,9 @@
-import Link from "next/link"
-import { ShieldCheck } from "lucide-react"
-import { TotpCard } from "./totp-card"
+import Link from "next/link";
+import { ShieldCheck } from "lucide-react";
+import { TotpCard } from "./totp-card";
 
 interface AuthSplitLayoutProps {
-  children: React.ReactNode
+  children: React.ReactNode;
 }
 
 export function AuthSplitLayout({ children }: AuthSplitLayoutProps) {
@@ -13,7 +13,10 @@ export function AuthSplitLayout({ children }: AuthSplitLayoutProps) {
       <div className="hidden md:flex md:w-[44%] flex-col bg-brand-muted relative overflow-hidden p-8">
         {/* Logo */}
         <div className="flex items-center gap-2">
-          <ShieldCheck className="size-5 text-brand-surface" strokeWidth={2.5} />
+          <ShieldCheck
+            className="size-5 text-brand-surface"
+            strokeWidth={2.5}
+          />
           <span className="h4 text-brand-surface">Ninja TOTP</span>
         </div>
 
@@ -40,11 +43,13 @@ export function AuthSplitLayout({ children }: AuthSplitLayoutProps) {
         {/* Marketing copy */}
         <div className="space-y-3 px-10">
           <h1 className="h1 text-brand-surface max-w-xs">
-            Your codes,<br />in one quiet place.
+            Your codes,
+            <br />
+            in one quiet place.
           </h1>
           <p className="p2 text-brand-surface/70 max-w-xs">
-            End-to-end encrypted TOTP for teams. Share access with
-            vaults, never with people.
+            End-to-end encrypted TOTP for teams. Share access with vaults, never
+            with people.
           </p>
           <div className="flex items-center gap-1.5 pt-1">
             <span className="label text-brand-surface/50 border border-brand-surface/20 rounded-full px-2.5 py-1">
@@ -58,9 +63,7 @@ export function AuthSplitLayout({ children }: AuthSplitLayoutProps) {
       <div className="flex flex-1 flex-col bg-background relative">
         {/* Form area */}
         <div className="flex flex-1 flex-col items-center justify-center px-8 py-16">
-          <div className="w-full max-w-sm">
-            {children}
-          </div>
+          <div className="w-full max-w-[450px]">{children}</div>
         </div>
 
         {/* Footer */}
@@ -68,7 +71,11 @@ export function AuthSplitLayout({ children }: AuthSplitLayoutProps) {
           <span className="p3 text-muted-foreground">© Ninja TOTP 2025</span>
           <div className="flex items-center gap-4">
             {["Privacy", "Terms", "Status"].map((link) => (
-              <Link key={link} href="#" className="p3 text-muted-foreground hover:text-foreground transition-colors">
+              <Link
+                key={link}
+                href="#"
+                className="p3 text-muted-foreground hover:text-foreground transition-colors"
+              >
                 {link}
               </Link>
             ))}
@@ -76,5 +83,5 @@ export function AuthSplitLayout({ children }: AuthSplitLayoutProps) {
         </footer>
       </div>
     </div>
-  )
+  );
 }
