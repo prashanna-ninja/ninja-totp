@@ -15,7 +15,7 @@ import { Separator } from "@/components/ui/separator";
 import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { cn } from "@/lib/utils";
 import { signInSchema } from "@/validations/auth";
-import { signIn } from "@/lib/auth-client";
+import { signIn, authClient } from "@/lib/auth-client";
 import { toast } from "sonner";
 
 const schema = signInSchema.extend({ trustDevice: z.boolean() });
@@ -31,17 +31,24 @@ export function LoginForm() {
     defaultValues: { email: "", password: "", trustDevice: false },
   });
 
-  const onSubmit = (data: LoginValues) => {
-    signIn.email(
+  const onSubmit = async (data: LoginValues) => {
+    setIsSubmitting(true);
+
+    await signIn.email(
       { email: data.email, password: data.password },
       {
-        onRequest() {
-          setIsSubmitting(true);
-        },
-        onSuccess() {
-          setIsSubmitting(false);
-          router.push("/dashboard");
-          toast.success("Logged in successfully!");
+        async onSuccess(ctx) {
+          try {
+            if (!ctx.data?.twoFactorRedirect) {
+              // First time — enable 2FA for this account
+              await authClient.twoFactor.enable({ password: data.password });
+            }
+            await authClient.twoFactor.sendOtp({});
+            router.push(`/verify?email=${encodeURIComponent(data.email)}`);
+          } catch {
+            setIsSubmitting(false);
+            toast.error("Failed to send verification code. Please try again.");
+          }
         },
         onError(error: { error: { message: string } }) {
           setIsSubmitting(false);
@@ -118,7 +125,6 @@ export function LoginForm() {
           )}
         />
 
-        {/* Trust device + Forgot */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Controller
@@ -153,7 +159,7 @@ export function LoginForm() {
           disabled={isSubmitting}
           className={cn("w-full h-10 rounded-lg p2")}
         >
-          {isSubmitting ? "Signing in…" : "Continue →"}
+          {isSubmitting ? "Sending code…" : "Continue →"}
         </Button>
       </form>
 

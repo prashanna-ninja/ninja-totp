@@ -1,14 +1,13 @@
 import Link from "next/link"
-import { ShieldCheck } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { NinjaLogo } from "@/components/custom-ui/custom-logo/ninja-logo"
 
 export default function NotFound() {
   return (
     <div className="theme-page min-h-dvh flex flex-col items-center justify-center px-8 text-center">
       <div className="space-y-8 max-w-sm">
-        <div className="flex items-center justify-center gap-2">
-          <ShieldCheck className="size-5 text-brand-surface" strokeWidth={2.5} />
-          <span className="h4 text-brand-surface">Ninja TOTP</span>
+        <div className="flex items-center justify-center">
+          <NinjaLogo />
         </div>
 
         <p className="label text-muted-foreground">404 · PAGE NOT FOUND</p>
