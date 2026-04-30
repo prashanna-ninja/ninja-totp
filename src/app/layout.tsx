@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist_Mono, Bricolage_Grotesque, DM_Sans } from "next/font/google";
 import { Toaster } from "sonner";
+import { QueryProvider } from "@/components/providers/QueryProvider";
 import "./globals.css";
 
 const dmSans = DM_Sans({
@@ -34,7 +35,7 @@ export default function RootLayout({
       className={`${dmSans.variable} ${geistMono.variable} ${bricolage.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        {children}
+        <QueryProvider>{children}</QueryProvider>
         <Toaster richColors position="top-right" />
       </body>
     </html>

@@ -4,6 +4,21 @@ import { organizationSchema } from "@/validations/organization";
 import { NextRequest, NextResponse } from "next/server";
 import z from "zod";
 
+export async function GET() {
+  if (!(await getUserRole())) {
+    return new NextResponse("Unauthorized", { status: 401 });
+  }
+  try {
+    const organizations = await prisma.organization.findMany({
+      orderBy: { createdAt: "asc" },
+    });
+    return NextResponse.json(organizations);
+  } catch (error) {
+    console.error("Error fetching organizations:", error);
+    return new NextResponse("Internal Server Error", { status: 500 });
+  }
+}
+
 export async function POST(req: NextRequest) {
   if (!(await getUserRole())) {
     return new NextResponse("Unauthorized", { status: 401 });

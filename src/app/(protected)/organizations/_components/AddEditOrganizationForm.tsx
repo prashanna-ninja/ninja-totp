@@ -1,8 +1,10 @@
 "use client";
 
-import { useImperativeHandle } from "react";
+import { useEffect, useImperativeHandle } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 import { Input } from "@/components/ui/input";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
@@ -11,6 +13,12 @@ import {
   organizationSchema,
   type OrganizationInput,
 } from "@/validations/organization";
+import {
+  ORGANIZATION_QUERY_KEY,
+  createOrganization,
+  updateOrganization,
+} from "@/lib/services/organization";
+import type { Organization } from "@/generated/prisma/client";
 
 const COLOR_PALETTE = [
   { value: "#22c55e", label: "Green" },
@@ -29,24 +37,54 @@ export type AddEditOrganizationFormHandle = {
 
 type Props = {
   ref?: React.RefObject<AddEditOrganizationFormHandle | null>;
-  defaultValues?: Partial<OrganizationInput>;
-  onSubmit: (data: OrganizationInput) => void | Promise<void>;
+  organization?: Organization;
+  onSuccess?: () => void;
+  onPendingChange?: (pending: boolean) => void;
 };
 
-function AddEditOrganizationForm({ ref, defaultValues, onSubmit }: Props) {
+function AddEditOrganizationForm({
+  ref,
+  organization,
+  onSuccess,
+  onPendingChange,
+}: Props) {
+  const queryClient = useQueryClient();
+  const isEditing = Boolean(organization);
+
   const form = useForm<OrganizationInput>({
     resolver: zodResolver(organizationSchema),
     defaultValues: {
-      name: "",
-      color: "",
-      image: "",
-      ...defaultValues,
+      name: organization?.name ?? "",
+      color: organization?.color ?? "",
+      image: organization?.image ?? "",
     },
   });
 
+  const mutation = useMutation({
+    mutationFn: (data: OrganizationInput) =>
+      isEditing && organization
+        ? updateOrganization(organization.id, data)
+        : createOrganization(data),
+    onSuccess: () => {
+      toast.success(
+        `Organization ${isEditing ? "updated" : "created"} successfully!`,
+      );
+      queryClient.invalidateQueries({ queryKey: [ORGANIZATION_QUERY_KEY] });
+      onSuccess?.();
+      if (!isEditing) form.reset();
+    },
+    onError: (err: Error) => {
+      toast.error(err.message || "Something went wrong.");
+    },
+  });
+
+  useEffect(() => {
+    onPendingChange?.(mutation.isPending);
+  }, [mutation.isPending, onPendingChange]);
+
   useImperativeHandle(ref, () => ({
     submit: () => {
-      void form.handleSubmit(onSubmit)();
+      void form.handleSubmit((data) => mutation.mutate(data))();
     },
     reset: () => form.reset(),
   }));
@@ -55,7 +93,7 @@ function AddEditOrganizationForm({ ref, defaultValues, onSubmit }: Props) {
     <form
       onSubmit={(e) => {
         e.preventDefault();
-        form.handleSubmit(onSubmit)(e);
+        form.handleSubmit((data) => mutation.mutate(data))(e);
       }}
       className="space-y-6"
       noValidate
@@ -70,7 +108,7 @@ function AddEditOrganizationForm({ ref, defaultValues, onSubmit }: Props) {
               {...field}
               id="org-name"
               type="text"
-              placeholder="Acme Corp"
+              placeholder="Cobal Advisors"
               autoComplete="off"
               autoFocus
               maxLength={50}
