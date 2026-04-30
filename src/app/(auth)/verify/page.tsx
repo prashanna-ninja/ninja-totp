@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
-import { cookies, headers } from "next/headers";
+import { cookies } from "next/headers";
 
-import { auth } from "@/lib/auth";
+import { redirectIfAuthenticated } from "@/lib/auth-guard";
 import { AuthSplitLayout } from "../_components/auth-split-layout";
 import { OtpForm } from "./_components/otp-form";
 import { OtpLeftPanel } from "./_components/otp-left-panel";
@@ -11,8 +11,7 @@ interface Props {
 }
 
 export default async function VerifyPage({ searchParams }: Props) {
-  const session = await auth.api.getSession({ headers: await headers() });
-  if (session) redirect("/dashboard");
+  await redirectIfAuthenticated();
 
   const { email } = await searchParams;
   if (!email) redirect("/");
