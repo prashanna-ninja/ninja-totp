@@ -1,5 +1,12 @@
+import AppPageShell from "@/components/layout/app-page-layout/AppPageShell";
+
 function page() {
-  return <div>page</div>;
+  return (
+    <AppPageShell
+      title="Dashboard"
+      description="Recent activity across your vaults"
+    />
+  );
 }
 
 export default page;
