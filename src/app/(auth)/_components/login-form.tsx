@@ -142,7 +142,7 @@ export function LoginForm() {
             </Button>
             <span className="p3 text-border">·</span>
             <Button variant="link" size="sm" asChild className="p3 text-muted-foreground h-auto p-0">
-              <Link href="#">Forgot?</Link>
+              <Link href="/forgot-password">Forgot?</Link>
             </Button>
           </div>
         </div>
