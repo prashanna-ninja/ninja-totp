@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Eye, EyeOff, Building2, Fingerprint } from "lucide-react";
+import { Eye, EyeOff, Mail, Fingerprint } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
@@ -20,7 +20,6 @@ import { toast } from "sonner";
 
 const schema = signInSchema.extend({ trustDevice: z.boolean() });
 type LoginValues = z.infer<typeof schema>;
-
 export function LoginForm() {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
@@ -170,12 +169,14 @@ export function LoginForm() {
       </div>
 
       <div className="grid grid-cols-2 gap-3">
-        <Button type="button" variant="outline" className="flex flex-col items-center gap-1.5 h-auto py-4 rounded-xl">
-          <Building2 className="size-5 text-muted-foreground" />
-          <div className="text-center">
-            <p className="p3 font-medium text-foreground">Quick Login</p>
-            <p className="label text-muted-foreground">via magic links</p>
-          </div>
+        <Button type="button" variant="outline" asChild className="flex flex-col items-center gap-1.5 h-auto py-4 rounded-xl">
+          <Link href="/magic-link">
+            <Mail className="size-5 text-muted-foreground" />
+            <div className="text-center">
+              <p className="p3 font-medium text-foreground">Quick Login</p>
+              <p className="label text-muted-foreground">via magic links</p>
+            </div>
+          </Link>
         </Button>
         <Button
           type="button"

@@ -1,6 +1,7 @@
 import { Resend } from "resend";
 import ResetPasswordEmail from "@/components/emails/reset-password-email";
 import OtpEmail from "@/components/emails/otp-email";
+import MagicLinkEmail from "@/components/emails/magic-link-email";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -34,4 +35,20 @@ export const sendOtpEmail = async (email: string, otp: string) => {
   }
 
   console.log("OTP email sent:", data);
+};
+
+export const sendMagicLinkEmail = async (email: string, url: string) => {
+  const { data, error } = await resend.emails.send({
+    from: "Ninja TOTP <onboarding@resend.dev>",
+    to: email,
+    subject: "Your sign-in link",
+    react: MagicLinkEmail({ url }),
+  });
+
+  if (error) {
+    console.error("Resend error:", error);
+    throw new Error("Failed to send magic link email");
+  }
+
+  console.log("Magic link email sent:", data);
 };
