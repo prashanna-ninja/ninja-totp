@@ -1,4 +1,5 @@
 import { ShieldCheck } from "lucide-react";
+import Link from "next/link";
 import { cn } from "@/lib/utils";
 
 interface NinjaLogoProps {
@@ -23,9 +24,9 @@ export function NinjaLogo({ variant = "auth", collapsed = false, className }: Ni
   }
 
   return (
-    <div className={cn("flex items-center gap-2", className)}>
+    <Link href="/" className={cn("flex items-center gap-2", className)}>
       <ShieldCheck className="size-5 text-brand-surface" strokeWidth={2.5} />
       <span className="h4 text-brand-surface">Ninja TOTP</span>
-    </div>
+    </Link>
   );
 }

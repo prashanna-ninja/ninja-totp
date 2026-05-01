@@ -4,10 +4,11 @@ import OtpEmail from "@/components/emails/otp-email";
 import MagicLinkEmail from "@/components/emails/magic-link-email";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
+const FROM = "Ninja TOTP <onboarding@resend.dev>";
 
 export const sendResetPasswordEmail = async (email: string, url: string) => {
   const { data, error } = await resend.emails.send({
-    from: "Ninja TOTP <onboarding@resend.dev>",
+    from: FROM,
     to: email,
     subject: "Reset Your Password",
     react: ResetPasswordEmail({ url }),
@@ -23,7 +24,7 @@ export const sendResetPasswordEmail = async (email: string, url: string) => {
 
 export const sendOtpEmail = async (email: string, otp: string) => {
   const { data, error } = await resend.emails.send({
-    from: "Ninja TOTP <onboarding@resend.dev>",
+    from: FROM,
     to: email,
     subject: "Your verification code",
     react: OtpEmail({ otp }),
@@ -39,7 +40,7 @@ export const sendOtpEmail = async (email: string, otp: string) => {
 
 export const sendMagicLinkEmail = async (email: string, url: string) => {
   const { data, error } = await resend.emails.send({
-    from: "Ninja TOTP <onboarding@resend.dev>",
+    from: FROM,
     to: email,
     subject: "Your sign-in link",
     react: MagicLinkEmail({ url }),

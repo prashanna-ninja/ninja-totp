@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -12,18 +12,29 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Separator } from "@/components/ui/separator";
+import { Badge } from "@/components/ui/badge";
 import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { cn } from "@/lib/utils";
 import { signInSchema } from "@/validations/auth";
 import { signIn, authClient } from "@/lib/auth-client";
 import { toast } from "sonner";
+import { magicLinkErrors } from "@/types/auth";
 
 const schema = signInSchema.extend({ trustDevice: z.boolean() });
 type LoginValues = z.infer<typeof schema>;
-export function LoginForm() {
+
+export function LoginForm({ error }: { error?: string }) {
   const router = useRouter();
+  const [showError, setShowError] = useState(!!error);
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (!error) return;
+    const t = setTimeout(() => setShowError(false), 4000);
+    return () => clearTimeout(t);
+  }, [error]);
+
 
   const form = useForm<LoginValues>({
     resolver: zodResolver(schema),
@@ -59,6 +70,15 @@ export function LoginForm() {
 
   return (
     <div className="space-y-6">
+      {showError && error && (
+        <Badge
+          variant="destructive"
+          className="w-full justify-start rounded-lg px-4 py-2.5 text-xs animate-out fade-out duration-500 delay-[3500ms] fill-mode-forwards"
+        >
+          {magicLinkErrors[error] ?? "Something went wrong. Please try again."}
+        </Badge>
+      )}
+
       <p className="label text-muted-foreground">STEP 1 OF 2</p>
 
       <div className="space-y-1.5">
