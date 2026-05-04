@@ -30,14 +30,11 @@ function OrganizationCard({ organization }: Props) {
 
   return (
     <div className="rounded-2xl border border-border bg-white overflow-hidden shadow-sm hover:shadow-md transition-shadow">
-      <div className="h-1.5" style={{ backgroundColor: accent }} />
+      <div className="h-1.5 bg-brand-dark-background" />
 
       <div className="p-5">
         <div className="flex items-start gap-3">
-          <div
-            className="size-14 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden"
-            style={{ backgroundColor: accent }}
-          >
+          <div className="size-14 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden bg-brand-dark-background">
             {organization.image ? (
               <Image
                 src={organization.image}
@@ -48,7 +45,7 @@ function OrganizationCard({ organization }: Props) {
                 unoptimized
               />
             ) : (
-              <span className="text-white font-bold text-lg tracking-tight">
+              <span className="text-gray-700 font-bold text-lg tracking-tight">
                 {initials}
               </span>
             )}
@@ -63,7 +60,7 @@ function OrganizationCard({ organization }: Props) {
           <OrganizationActionButton organization={organization} />
         </div>
 
-        <div className="mt-5 grid grid-cols-3 rounded-xl bg-muted/60 py-3">
+        <div className="mt-5 grid grid-cols-3 rounded-xl bg-brand-dark-background py-3">
           <div className="flex flex-col items-center">
             <span className="text-lg font-bold text-foreground leading-none">
               0

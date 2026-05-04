@@ -16,7 +16,7 @@ function AppPageShell({
   children,
 }: AppPageShellProps) {
   return (
-    <div className="flex flex-col h-full w-full">
+    <div className="flex flex-col h-full w-full bg-sidebar">
       <AppHeader
         breadcrumbs={breadcrumbs}
         title={title}

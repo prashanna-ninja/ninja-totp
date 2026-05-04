@@ -9,6 +9,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { cn } from "@/lib/utils";
 
 export type ActionMenuItem =
   | { separator: true }
@@ -26,6 +27,7 @@ interface ActionMenuProps {
   label?: string;
   side?: "top" | "bottom" | "left" | "right";
   align?: "start" | "center" | "end";
+  className?: string;
 }
 
 export function ActionMenu({
@@ -34,11 +36,16 @@ export function ActionMenu({
   label,
   side = "top",
   align = "end",
+  className,
 }: ActionMenuProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>{trigger}</DropdownMenuTrigger>
-      <DropdownMenuContent side={side} align={align} className="w-24">
+      <DropdownMenuContent
+        side={side}
+        align={align}
+        className={cn("w-24", className)}
+      >
         {label && <DropdownMenuLabel>{label}</DropdownMenuLabel>}
         {items.map((item, i) =>
           item.separator ? (

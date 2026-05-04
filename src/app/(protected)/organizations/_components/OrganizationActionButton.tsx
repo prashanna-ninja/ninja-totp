@@ -5,12 +5,7 @@ import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { ActionMenu } from "@/components/custom-ui/custom-dropdown/action-menu";
 import CustomPopup from "@/components/custom-popup/CustomPopup";
 import CustomConfirmationPopup from "@/components/custom-popup/CustomConfirmationPopup";
 import {
@@ -47,8 +42,11 @@ function OrganizationActionButton({ organization }: Props) {
 
   return (
     <>
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
+      <ActionMenu
+        side="bottom"
+        align="end"
+        className="min-w-fit w-auto"
+        trigger={
           <button
             type="button"
             aria-label="Organization actions"
@@ -57,21 +55,21 @@ function OrganizationActionButton({ organization }: Props) {
           >
             <MoreHorizontal size={18} />
           </button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="min-w-36">
-          <DropdownMenuItem onSelect={() => setIsEditOpen(true)}>
-            <Pencil />
-            Edit
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            variant="destructive"
-            onSelect={() => setIsDeleteOpen(true)}
-          >
-            <Trash2 />
-            Delete
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+        }
+        items={[
+          {
+            label: "Edit",
+            icon: Pencil,
+            onClick: () => setIsEditOpen(true),
+          },
+          {
+            label: "Delete",
+            icon: Trash2,
+            variant: "destructive",
+            onClick: () => setIsDeleteOpen(true),
+          },
+        ]}
+      />
 
       <CustomPopup
         isOpen={isEditOpen}
