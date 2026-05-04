@@ -5,7 +5,7 @@ import { ArrowRight } from "lucide-react";
 import type { Organization } from "@/generated/prisma/client";
 import OrganizationActionButton from "./OrganizationActionButton";
 
-const DEFAULT_COLOR = "#64748b";
+const DEFAULT_COLOR = "#f2f1ec";
 
 type Props = {
   organization: Organization;
@@ -30,11 +30,19 @@ function OrganizationCard({ organization }: Props) {
 
   return (
     <div className="rounded-2xl border border-border bg-white overflow-hidden shadow-sm hover:shadow-md transition-shadow">
-      <div className="h-1.5 bg-brand-dark-background" />
+      <div
+        className="h-1.5 "
+        style={{
+          backgroundColor: accent,
+        }}
+      />
 
       <div className="p-5">
         <div className="flex items-start gap-3">
-          <div className="size-14 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden bg-brand-dark-background">
+          <div
+            className="size-14 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden"
+            style={{ backgroundColor: accent }}
+          >
             {organization.image ? (
               <Image
                 src={organization.image}
