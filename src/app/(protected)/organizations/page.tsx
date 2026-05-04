@@ -1,5 +1,6 @@
 import AppPageShell from "@/components/layout/app-page-layout/AppPageShell";
 import OrganizationPageActions from "./_components/OrganizationPageActions";
+import OrganizationsGrid from "./_components/OrganizationsGrid";
 
 function page() {
   return (
@@ -7,7 +8,9 @@ function page() {
       title="Organizations"
       description="Manage your organizations and their members."
       actions={<OrganizationPageActions />}
-    ></AppPageShell>
+    >
+      <OrganizationsGrid />
+    </AppPageShell>
   );
 }
 

@@ -42,3 +42,11 @@ export async function updateOrganization(
   }
   return res.json();
 }
+
+export async function deleteOrganization(id: string): Promise<void> {
+  const res = await fetch(`/api/organization/${id}`, { method: "DELETE" });
+  if (!res.ok) {
+    const body = await res.json().catch(() => null);
+    throw new Error(body?.message ?? "Failed to delete organization");
+  }
+}
