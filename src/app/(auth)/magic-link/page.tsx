@@ -1,13 +1,12 @@
 import { redirectIfAuthenticated } from "@/lib/auth-guard";
 import { AuthSplitLayout } from "../_components/auth-split-layout";
-import { SignupForm } from "./_components/signup-form";
+import { MagicLinkForm } from "./_components/magic-link-form";
 
-export default async function SignUpPage() {
+export default async function MagicLinkPage() {
   await redirectIfAuthenticated();
-
   return (
     <AuthSplitLayout>
-      <SignupForm />
+      <MagicLinkForm />
     </AuthSplitLayout>
   );
 }

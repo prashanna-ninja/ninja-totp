@@ -1,7 +1,10 @@
 import AppSideBar from "@/components/layout/AppSideBar";
 import { SidebarProvider } from "@/components/layout/SidebarContext";
+import { redirectIfUnauthenticated } from "@/lib/auth-guard";
 
-function layout({ children }: { children: React.ReactNode }) {
+async function layout({ children }: { children: React.ReactNode }) {
+  await redirectIfUnauthenticated();
+
   return (
     <SidebarProvider>
       <div className="flex h-screen">
