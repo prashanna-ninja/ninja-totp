@@ -28,11 +28,17 @@ interface ActionMenuProps {
   align?: "start" | "center" | "end";
 }
 
-export function ActionMenu({ trigger, items, label, side = "top", align = "end" }: ActionMenuProps) {
+export function ActionMenu({
+  trigger,
+  items,
+  label,
+  side = "top",
+  align = "end",
+}: ActionMenuProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>{trigger}</DropdownMenuTrigger>
-      <DropdownMenuContent side={side} align={align} className="w-48">
+      <DropdownMenuContent side={side} align={align} className="w-24">
         {label && <DropdownMenuLabel>{label}</DropdownMenuLabel>}
         {items.map((item, i) =>
           item.separator ? (
@@ -46,7 +52,7 @@ export function ActionMenu({ trigger, items, label, side = "top", align = "end" 
               {item.icon && <item.icon />}
               {item.label}
             </DropdownMenuItem>
-          )
+          ),
         )}
       </DropdownMenuContent>
     </DropdownMenu>
