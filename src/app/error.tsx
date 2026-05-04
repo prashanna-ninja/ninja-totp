@@ -1,9 +1,9 @@
 "use client"
 
 import { useEffect } from "react"
-import { ShieldCheck } from "lucide-react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
+import { NinjaLogo } from "@/components/custom-ui/custom-logo/ninja-logo"
 
 interface ErrorProps {
   error: Error & { digest?: string }
@@ -18,9 +18,8 @@ export default function Error({ error, reset }: ErrorProps) {
   return (
     <div className="theme-page min-h-dvh flex flex-col items-center justify-center px-8 text-center">
       <div className="space-y-8 max-w-sm">
-        <div className="flex items-center justify-center gap-2">
-          <ShieldCheck className="size-5 text-brand-surface" strokeWidth={2.5} />
-          <span className="h4 text-brand-surface">Ninja TOTP</span>
+        <div className="flex items-center justify-center">
+          <NinjaLogo />
         </div>
 
         <p className="label text-muted-foreground">500 · SOMETHING WENT WRONG</p>
@@ -42,7 +41,7 @@ export default function Error({ error, reset }: ErrorProps) {
             Try again
           </Button>
           <Button asChild variant="outline" className="w-full h-10 rounded-lg p2">
-            <Link href="/">Back to sign in</Link>
+            <Link href="/">Go to homepage</Link>
           </Button>
         </div>
       </div>

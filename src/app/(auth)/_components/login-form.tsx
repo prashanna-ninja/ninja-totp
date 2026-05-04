@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Eye, EyeOff, Building2, Fingerprint } from "lucide-react";
+import { Eye, EyeOff, Mail, Fingerprint } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
@@ -12,36 +12,53 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Separator } from "@/components/ui/separator";
+import { Badge } from "@/components/ui/badge";
 import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { cn } from "@/lib/utils";
 import { signInSchema } from "@/validations/auth";
-import { signIn } from "@/lib/auth-client";
+import { signIn, authClient } from "@/lib/auth-client";
 import { toast } from "sonner";
+import { magicLinkErrors } from "@/types/auth";
 
 const schema = signInSchema.extend({ trustDevice: z.boolean() });
 type LoginValues = z.infer<typeof schema>;
 
-export function LoginForm() {
+export function LoginForm({ error }: { error?: string }) {
   const router = useRouter();
+  const [showError, setShowError] = useState(!!error);
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (!error) return;
+    const t = setTimeout(() => setShowError(false), 4000);
+    return () => clearTimeout(t);
+  }, [error]);
+
 
   const form = useForm<LoginValues>({
     resolver: zodResolver(schema),
     defaultValues: { email: "", password: "", trustDevice: false },
   });
 
-  const onSubmit = (data: LoginValues) => {
-    signIn.email(
+  const onSubmit = async (data: LoginValues) => {
+    setIsSubmitting(true);
+
+    await signIn.email(
       { email: data.email, password: data.password },
       {
-        onRequest() {
-          setIsSubmitting(true);
-        },
-        onSuccess() {
-          setIsSubmitting(false);
-          router.push("/dashboard");
-          toast.success("Logged in successfully!");
+        async onSuccess(ctx) {
+          try {
+            if (!ctx.data?.twoFactorRedirect) {
+              // First time — enable 2FA for this account
+              await authClient.twoFactor.enable({ password: data.password });
+            }
+            await authClient.twoFactor.sendOtp({});
+            router.push(`/verify?email=${encodeURIComponent(data.email)}`);
+          } catch {
+            setIsSubmitting(false);
+            toast.error("Failed to send verification code. Please try again.");
+          }
         },
         onError(error: { error: { message: string } }) {
           setIsSubmitting(false);
@@ -53,6 +70,15 @@ export function LoginForm() {
 
   return (
     <div className="space-y-6">
+      {showError && error && (
+        <Badge
+          variant="destructive"
+          className="w-full justify-start rounded-lg px-4 py-2.5 text-xs animate-out fade-out duration-500 delay-[3500ms] fill-mode-forwards"
+        >
+          {magicLinkErrors[error] ?? "Something went wrong. Please try again."}
+        </Badge>
+      )}
+
       <p className="label text-muted-foreground">STEP 1 OF 2</p>
 
       <div className="space-y-1.5">
@@ -118,7 +144,6 @@ export function LoginForm() {
           )}
         />
 
-        {/* Trust device + Forgot */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Controller
@@ -153,7 +178,7 @@ export function LoginForm() {
           disabled={isSubmitting}
           className={cn("w-full h-10 rounded-lg p2")}
         >
-          {isSubmitting ? "Signing in…" : "Continue →"}
+          {isSubmitting ? "Sending code…" : "Continue →"}
         </Button>
       </form>
 
@@ -164,14 +189,21 @@ export function LoginForm() {
       </div>
 
       <div className="grid grid-cols-2 gap-3">
-        <Button type="button" variant="outline" className="flex flex-col items-center gap-1.5 h-auto py-4 rounded-xl">
-          <Building2 className="size-5 text-muted-foreground" />
-          <div className="text-center">
-            <p className="p3 font-medium text-foreground">SSO</p>
-            <p className="label text-muted-foreground">SAML or OIDC</p>
-          </div>
+        <Button type="button" variant="outline" asChild className="flex flex-col items-center gap-1.5 h-auto py-4 rounded-xl">
+          <Link href="/magic-link">
+            <Mail className="size-5 text-muted-foreground" />
+            <div className="text-center">
+              <p className="p3 font-medium text-foreground">Quick Login</p>
+              <p className="label text-muted-foreground">via magic links</p>
+            </div>
+          </Link>
         </Button>
-        <Button type="button" variant="outline" className="flex flex-col items-center gap-1.5 h-auto py-4 rounded-xl">
+        <Button
+          type="button"
+          variant="outline"
+          className="flex flex-col items-center gap-1.5 h-auto py-4 rounded-xl"
+          onClick={() => toast.info("PassKey login is coming soon!")}
+        >
           <Fingerprint className="size-5 text-muted-foreground" />
           <div className="text-center">
             <p className="p3 font-medium text-foreground">PassKey</p>
